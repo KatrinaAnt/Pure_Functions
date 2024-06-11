@@ -1,5 +1,6 @@
 import globals from 'globals';
 import pluginJs from '@eslint/js';
+import jest from 'eslint-plugin-jest';
 import stylisticJs from '@stylistic/eslint-plugin-js';
 
 export default [
@@ -14,7 +15,9 @@ export default [
         languageOptions: {
             ecmaVersion: 2023,
             sourceType: 'module',
-            globals: globals.browser,
+            globals: {
+                ...globals.browser, ...globals.node
+            },
         },
     },
     {
@@ -29,6 +32,14 @@ export default [
             'no-unused-vars': 'off', // не испоьзуемые переменные
             'no-console': 'off', // console.log
             'no-var': 'error',
+        },
+    },
+    {
+        files: [ 'src/**/**/test.js' ],
+        ...jest.configs['flat/recommended'],
+        rules: {
+            ...jest.configs['flat/recommended'].rules,
+            'jest/prefer-expect-assertions': 'off',
         },
     },
     {
